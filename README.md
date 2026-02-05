@@ -13,13 +13,13 @@ Monorepo bootstrap for Recruiting CRM with:
 
 ## Environment variables
 
-Copy the example file and adjust values if needed:
+Copy the root example file for local development:
 
 ```bash
 cp .env.example .env
 ```
 
-The backend reads `PORT`, and the frontend reads `VITE_API_URL`.
+Backend-specific variables can also be copied from `backend/.env.example`.
 
 ## Install dependencies
 
@@ -36,13 +36,28 @@ npm run dev
 ```
 
 - Frontend: http://localhost:5173
-- Backend: http://localhost:3001
+- Backend: http://localhost:3000
 
 You can also run each service independently:
 
 ```bash
 npm run dev -w frontend
 npm run dev -w backend
+```
+
+## Health check
+
+```bash
+curl http://localhost:3000/health
+```
+
+Expected response:
+
+```json
+{
+  "ok": true,
+  "time": "2026-01-01T00:00:00.000Z"
+}
 ```
 
 ## Lint
