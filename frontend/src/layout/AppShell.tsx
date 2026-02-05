@@ -1,12 +1,13 @@
 import { ReactNode } from 'react';
 import {
   DashboardOutlined,
+  LogoutOutlined,
   SettingOutlined,
   TeamOutlined,
   UnorderedListOutlined,
   UsergroupAddOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Typography } from 'antd';
+import { Button, Layout, Menu, Space, Typography } from 'antd';
 import type { MenuProps } from 'antd';
 
 const { Header, Content, Sider } = Layout;
@@ -21,6 +22,7 @@ export type PageKey =
 type AppShellProps = {
   currentPage: PageKey;
   onNavigate: (page: PageKey) => void;
+  onLogout: () => void;
   children: ReactNode;
 };
 
@@ -32,7 +34,12 @@ const menuItems: MenuProps['items'] = [
   { key: 'settings', icon: <SettingOutlined />, label: 'Настройки' },
 ];
 
-export function AppShell({ currentPage, onNavigate, children }: AppShellProps) {
+export function AppShell({
+  currentPage,
+  onNavigate,
+  onLogout,
+  children,
+}: AppShellProps) {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider breakpoint="lg" collapsedWidth="0">
@@ -55,10 +62,23 @@ export function AppShell({ currentPage, onNavigate, children }: AppShellProps) {
         />
       </Sider>
       <Layout>
-        <Header style={{ background: '#fff', padding: '0 24px' }}>
+        <Header
+          style={{
+            background: '#fff',
+            padding: '0 24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
           <Typography.Title level={4} style={{ margin: '16px 0' }}>
             CRM для рекрутинга
           </Typography.Title>
+          <Space>
+            <Button icon={<LogoutOutlined />} onClick={onLogout}>
+              Выйти
+            </Button>
+          </Space>
         </Header>
         <Content style={{ margin: 24 }}>
           <div

@@ -20,7 +20,20 @@ function parsePort(value: string | undefined): number {
   return port;
 }
 
+function requireEnv(name: string): string {
+  const value = process.env[name]?.trim();
+
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+
+  return value;
+}
+
 export const env = {
   port: parsePort(process.env.PORT),
   corsOrigin: process.env.CORS_ORIGIN?.trim() || DEFAULT_CORS_ORIGIN,
+  jwtSecret: requireEnv('JWT_SECRET'),
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN?.trim() || '7d',
+  isDevMode: (process.env.NODE_ENV || 'development') !== 'production',
 };
