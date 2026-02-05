@@ -100,7 +100,9 @@ const hrOptions = [
   { value: 'Дмитрий Федоров', label: 'Дмитрий Федоров' },
 ];
 
-const cityOptions = Array.from(new Set(mockCandidates.map((candidate) => candidate.city))).map((city) => ({
+const cityOptions = Array.from(
+  new Set(mockCandidates.map((candidate) => candidate.city)),
+).map((city) => ({
   value: city,
   label: city,
 }));
@@ -112,16 +114,21 @@ const vacancyOptions = Array.from(
   label: vacancyTag,
 }));
 
-export function CandidatesPage({ selectedCandidateId, onOpenCandidate }: CandidatesPageProps) {
+export function CandidatesPage({
+  selectedCandidateId,
+  onOpenCandidate,
+}: CandidatesPageProps) {
   const [filters, setFilters] = useState<CandidateFilters>({});
 
   const filteredCandidates = useMemo(
     () =>
       mockCandidates.filter((candidate) => {
         const byStatus = !filters.status || candidate.status === filters.status;
-        const byHr = !filters.hrAssignee || candidate.hrAssignee === filters.hrAssignee;
+        const byHr =
+          !filters.hrAssignee || candidate.hrAssignee === filters.hrAssignee;
         const byCity = !filters.city || candidate.city === filters.city;
-        const byVacancy = !filters.vacancyTag || candidate.vacancyTag === filters.vacancyTag;
+        const byVacancy =
+          !filters.vacancyTag || candidate.vacancyTag === filters.vacancyTag;
 
         return byStatus && byHr && byCity && byVacancy;
       }),
@@ -213,7 +220,9 @@ export function CandidatesPage({ selectedCandidateId, onOpenCandidate }: Candida
           options={hrOptions}
           value={filters.hrAssignee}
           allowClear
-          onChange={(hrAssignee) => setFilters((prev) => ({ ...prev, hrAssignee }))}
+          onChange={(hrAssignee) =>
+            setFilters((prev) => ({ ...prev, hrAssignee }))
+          }
         />
         <Select
           placeholder="Город"
@@ -229,14 +238,17 @@ export function CandidatesPage({ selectedCandidateId, onOpenCandidate }: Candida
           options={vacancyOptions}
           value={filters.vacancyTag}
           allowClear
-          onChange={(vacancyTag) => setFilters((prev) => ({ ...prev, vacancyTag }))}
+          onChange={(vacancyTag) =>
+            setFilters((prev) => ({ ...prev, vacancyTag }))
+          }
         />
         <Button onClick={() => setFilters({})}>Сбросить</Button>
       </Space>
 
       {selectedCandidateId ? (
         <Typography.Text type="secondary">
-          Открыта карточка кандидата #{selectedCandidateId} (детали будут добавлены в следующем issue).
+          Открыта карточка кандидата #{selectedCandidateId} (детали будут
+          добавлены в следующем issue).
         </Typography.Text>
       ) : null}
 

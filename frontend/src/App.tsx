@@ -96,7 +96,10 @@ function App() {
   }, []);
 
   const currentPage = useMemo(() => getPageByPath(pathname), [pathname]);
-  const selectedCandidateId = useMemo(() => getCandidateIdByPath(pathname), [pathname]);
+  const selectedCandidateId = useMemo(
+    () => getCandidateIdByPath(pathname),
+    [pathname],
+  );
 
   const handleLoginSuccess = () => {
     setAuthState('authenticated');
