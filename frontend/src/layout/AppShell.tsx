@@ -11,7 +11,12 @@ import type { MenuProps } from 'antd';
 
 const { Header, Content, Sider } = Layout;
 
-export type PageKey = 'dashboard' | 'candidates' | 'vacancies' | 'pipeline' | 'settings';
+export type PageKey =
+  | 'dashboard'
+  | 'candidates'
+  | 'vacancies'
+  | 'pipeline'
+  | 'settings';
 
 type AppShellProps = {
   currentPage: PageKey;
@@ -31,7 +36,16 @@ export function AppShell({ currentPage, onNavigate, children }: AppShellProps) {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider breakpoint="lg" collapsedWidth="0">
-        <div style={{ color: 'white', padding: '16px', fontSize: 18, fontWeight: 600 }}>CRM для рекрутинга</div>
+        <div
+          style={{
+            color: 'white',
+            padding: '16px',
+            fontSize: 18,
+            fontWeight: 600,
+          }}
+        >
+          CRM для рекрутинга
+        </div>
         <Menu
           theme="dark"
           mode="inline"
@@ -47,7 +61,16 @@ export function AppShell({ currentPage, onNavigate, children }: AppShellProps) {
           </Typography.Title>
         </Header>
         <Content style={{ margin: 24 }}>
-          <div style={{ padding: 24, minHeight: 360, background: '#fff', borderRadius: 8 }}>{children}</div>
+          <div
+            style={{
+              padding: 24,
+              minHeight: 360,
+              background: '#fff',
+              borderRadius: 8,
+            }}
+          >
+            {children}
+          </div>
         </Content>
       </Layout>
     </Layout>

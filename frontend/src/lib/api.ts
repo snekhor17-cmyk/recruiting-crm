@@ -10,7 +10,9 @@ export async function pingApiHealth(): Promise<HealthCheckResult> {
   const bodyText = await response.text();
 
   if (!response.ok) {
-    throw new Error(`Status ${response.status}: ${bodyText || 'Неизвестная ошибка'}`);
+    throw new Error(
+      `Status ${response.status}: ${bodyText || 'Неизвестная ошибка'}`,
+    );
   }
 
   return {
