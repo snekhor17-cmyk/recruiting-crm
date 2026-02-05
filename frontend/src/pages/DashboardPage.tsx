@@ -35,7 +35,9 @@ export function DashboardPage() {
   return (
     <Space direction="vertical" size="middle" style={{ width: '100%' }}>
       <Typography.Title level={2}>Дашборд</Typography.Title>
-      <Typography.Text type="secondary">Эта страница проверяет доступность сервера.</Typography.Text>
+      <Typography.Text type="secondary">
+        Эта страница проверяет доступность сервера.
+      </Typography.Text>
       <div>
         <Button type="primary" loading={isLoading} onClick={onPingApi}>
           Проверить сервер
@@ -45,7 +47,9 @@ export function DashboardPage() {
         <Alert
           type="success"
           message={pingState.summary}
-          description={<Typography.Text code>{pingState.details}</Typography.Text>}
+          description={
+            <Typography.Text code>{pingState.details}</Typography.Text>
+          }
           showIcon
         />
       )}
@@ -53,7 +57,9 @@ export function DashboardPage() {
         <Alert
           type="error"
           message={pingState.summary}
-          description={<Typography.Text code>{pingState.details}</Typography.Text>}
+          description={
+            <Typography.Text code>{pingState.details}</Typography.Text>
+          }
           showIcon
         />
       )}

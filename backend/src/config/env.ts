@@ -12,7 +12,9 @@ function parsePort(value: string | undefined): number {
 
   const port = Number.parseInt(value, 10);
   if (Number.isNaN(port) || port <= 0) {
-    throw new Error(`Invalid PORT value: "${value}". PORT must be a positive integer.`);
+    throw new Error(
+      `Invalid PORT value: "${value}". PORT must be a positive integer.`,
+    );
   }
 
   return port;
