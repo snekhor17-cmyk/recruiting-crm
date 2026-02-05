@@ -101,8 +101,7 @@ const mockCandidates: Candidate[] = [
     plannedInterviewDate: '2025-01-21',
     actualInterviewDate: '2025-01-22',
     managerInterviewDate: '2025-01-24',
-    note:
-      'Кандидат с сильным опытом в b2b-продажах. Важно обсудить мотивацию перехода и готовность к гибридному графику.',
+    note: 'Кандидат с сильным опытом в b2b-продажах. Важно обсудить мотивацию перехода и готовность к гибридному графику.',
     contactResult: 'Ожидает звонка',
   },
   {
@@ -275,18 +274,18 @@ export function CandidatesPage({
 
   const selectedCandidate = useMemo(
     () =>
-      mockCandidates.find((candidate) => candidate.id === selectedCandidateId) ??
-      null,
+      mockCandidates.find(
+        (candidate) => candidate.id === selectedCandidateId,
+      ) ?? null,
     [selectedCandidateId],
   );
 
-  const isOverdue =
-    selectedCandidate?.nextContactDate
-      ? dayjs(selectedCandidate.nextContactDate).isBefore(dayjs(), 'day')
-      : false;
+  const isOverdue = selectedCandidate?.nextContactDate
+    ? dayjs(selectedCandidate.nextContactDate).isBefore(dayjs(), 'day')
+    : false;
 
   const comments = selectedCandidate
-    ? commentsByCandidateId[selectedCandidate.id] ?? []
+    ? (commentsByCandidateId[selectedCandidate.id] ?? [])
     : [];
 
   const columns: TableColumnsType<Candidate> = [
@@ -369,7 +368,10 @@ export function CandidatesPage({
 
     setCommentsByCandidateId((prev) => ({
       ...prev,
-      [selectedCandidate.id]: [...(prev[selectedCandidate.id] ?? []), nextComment],
+      [selectedCandidate.id]: [
+        ...(prev[selectedCandidate.id] ?? []),
+        nextComment,
+      ],
     }));
     setCommentDraft('');
   };
@@ -457,54 +459,90 @@ export function CandidatesPage({
                 ]}
               />
               <Typography.Text type="secondary">
-                ID {selectedCandidate.id} · Создан: {selectedCandidate.createdAt}
+                ID {selectedCandidate.id} · Создан:{' '}
+                {selectedCandidate.createdAt}
               </Typography.Text>
             </Space>
 
             <Row gutter={24} align="top">
               <Col span={15}>
-                <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                  <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                <Space
+                  direction="vertical"
+                  size="middle"
+                  style={{ width: '100%' }}
+                >
+                  <Space
+                    direction="vertical"
+                    size={8}
+                    style={{ width: '100%' }}
+                  >
                     <Typography.Title level={5} style={{ margin: 0 }}>
                       Основная информация
                     </Typography.Title>
                     <Flex vertical gap={12}>
                       <Space direction="vertical" size={0}>
                         <Typography.Text strong>Статус</Typography.Text>
-                        <Select value={selectedCandidate.status} options={statusOptions} />
+                        <Select
+                          value={selectedCandidate.status}
+                          options={statusOptions}
+                        />
                       </Space>
 
                       <Space
                         direction="vertical"
-                        style={{ border: '1px solid #f0f0f0', borderRadius: 8, padding: 12 }}
+                        style={{
+                          border: '1px solid #f0f0f0',
+                          borderRadius: 8,
+                          padding: 12,
+                        }}
                       >
                         <Flex justify="space-between" align="center">
                           <Typography.Text strong>Контакт</Typography.Text>
                           <Button size="small">Изменить</Button>
                         </Flex>
-                        <Typography.Text>{selectedCandidate.fullName}</Typography.Text>
-                        <Typography.Text>{selectedCandidate.phone}</Typography.Text>
-                        <Typography.Text>{selectedCandidate.email}</Typography.Text>
+                        <Typography.Text>
+                          {selectedCandidate.fullName}
+                        </Typography.Text>
+                        <Typography.Text>
+                          {selectedCandidate.phone}
+                        </Typography.Text>
+                        <Typography.Text>
+                          {selectedCandidate.email}
+                        </Typography.Text>
                       </Space>
 
                       <Space
                         direction="vertical"
-                        style={{ border: '1px solid #f0f0f0', borderRadius: 8, padding: 12 }}
+                        style={{
+                          border: '1px solid #f0f0f0',
+                          borderRadius: 8,
+                          padding: 12,
+                        }}
                       >
                         <Flex justify="space-between" align="center">
-                          <Typography.Text strong>Ответственный HR</Typography.Text>
+                          <Typography.Text strong>
+                            Ответственный HR
+                          </Typography.Text>
                           <Button size="small">Изменить</Button>
                         </Flex>
-                        <Typography.Text>{selectedCandidate.hrAssignee}</Typography.Text>
+                        <Typography.Text>
+                          {selectedCandidate.hrAssignee}
+                        </Typography.Text>
                         <Typography.Text type="secondary">
                           {selectedCandidate.hrRole}
                         </Typography.Text>
-                        <Typography.Text>{selectedCandidate.hrPhone}</Typography.Text>
+                        <Typography.Text>
+                          {selectedCandidate.hrPhone}
+                        </Typography.Text>
                       </Space>
                     </Flex>
                   </Space>
 
-                  <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                  <Space
+                    direction="vertical"
+                    size={8}
+                    style={{ width: '100%' }}
+                  >
                     <Typography.Title level={5} style={{ margin: 0 }}>
                       Поля кандидата
                     </Typography.Title>
@@ -559,8 +597,12 @@ export function CandidatesPage({
                       </Col>
                       <Col span={24}>
                         <Space align="center">
-                          <Typography.Text>Дата следующего контакта</Typography.Text>
-                          {isOverdue ? <Tag color="error">Просрочена</Tag> : null}
+                          <Typography.Text>
+                            Дата следующего контакта
+                          </Typography.Text>
+                          {isOverdue ? (
+                            <Tag color="error">Просрочена</Tag>
+                          ) : null}
                         </Space>
                         <DatePicker
                           style={{ width: '100%' }}
@@ -627,11 +669,15 @@ export function CandidatesPage({
                                     width: '100%',
                                   }}
                                 >
-                                  <Typography.Text strong>{comment.author}</Typography.Text>
+                                  <Typography.Text strong>
+                                    {comment.author}
+                                  </Typography.Text>
                                   <Typography.Text type="secondary">
                                     {comment.date}
                                   </Typography.Text>
-                                  <Typography.Text>{comment.text}</Typography.Text>
+                                  <Typography.Text>
+                                    {comment.text}
+                                  </Typography.Text>
                                 </Space>
                               ))
                             ) : (
@@ -648,7 +694,9 @@ export function CandidatesPage({
                             <Input.TextArea
                               rows={4}
                               value={commentDraft}
-                              onChange={(event) => setCommentDraft(event.target.value)}
+                              onChange={(event) =>
+                                setCommentDraft(event.target.value)
+                              }
                             />
                             <Button type="primary" onClick={handleAddComment}>
                               Добавить комментарий
