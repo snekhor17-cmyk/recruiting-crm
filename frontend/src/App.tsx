@@ -142,6 +142,10 @@ function App() {
             navigate(nextPath);
             setPathname(nextPath);
           }}
+          onCloseCandidate={() => {
+            navigate('/candidates');
+            setPathname('/candidates');
+          }}
         />
       );
     }
