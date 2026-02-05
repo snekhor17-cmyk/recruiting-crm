@@ -8,7 +8,10 @@ export function hashPassword(password: string): string {
   return `${salt}:${hash}`;
 }
 
-export function verifyPassword(password: string, passwordHash: string): boolean {
+export function verifyPassword(
+  password: string,
+  passwordHash: string,
+): boolean {
   const [salt, storedHash] = passwordHash.split(':');
 
   if (!salt || !storedHash) {
@@ -16,5 +19,8 @@ export function verifyPassword(password: string, passwordHash: string): boolean 
   }
 
   const computedHash = scryptSync(password, salt, KEY_LENGTH).toString('hex');
-  return timingSafeEqual(Buffer.from(storedHash, 'hex'), Buffer.from(computedHash, 'hex'));
+  return timingSafeEqual(
+    Buffer.from(storedHash, 'hex'),
+    Buffer.from(computedHash, 'hex'),
+  );
 }

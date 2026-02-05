@@ -7,7 +7,9 @@ export function listUsers(): User[] {
 }
 
 export function findUserByEmail(email: string): User | undefined {
-  return listUsers().find((user) => user.email.toLowerCase() === email.toLowerCase());
+  return listUsers().find(
+    (user) => user.email.toLowerCase() === email.toLowerCase(),
+  );
 }
 
 export function findUserById(id: string): User | undefined {

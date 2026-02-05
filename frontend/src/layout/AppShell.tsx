@@ -34,7 +34,12 @@ const menuItems: MenuProps['items'] = [
   { key: 'settings', icon: <SettingOutlined />, label: 'Настройки' },
 ];
 
-export function AppShell({ currentPage, onNavigate, onLogout, children }: AppShellProps) {
+export function AppShell({
+  currentPage,
+  onNavigate,
+  onLogout,
+  children,
+}: AppShellProps) {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider breakpoint="lg" collapsedWidth="0">
@@ -57,7 +62,15 @@ export function AppShell({ currentPage, onNavigate, onLogout, children }: AppShe
         />
       </Sider>
       <Layout>
-        <Header style={{ background: '#fff', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Header
+          style={{
+            background: '#fff',
+            padding: '0 24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
           <Typography.Title level={4} style={{ margin: '16px 0' }}>
             CRM для рекрутинга
           </Typography.Title>

@@ -7,7 +7,9 @@ export const authRouter = Router();
 
 const INVALID_CREDENTIALS_MESSAGE = 'Неверный email или пароль';
 
-function parseCredentials(body: unknown): { email: string; password: string } | null {
+function parseCredentials(
+  body: unknown,
+): { email: string; password: string } | null {
   if (!body || typeof body !== 'object') {
     return null;
   }

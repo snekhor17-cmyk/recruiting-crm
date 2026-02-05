@@ -24,11 +24,16 @@ function makeHeaders(): HeadersInit {
 }
 
 export async function pingApiHealth(): Promise<HealthCheckResult> {
-  const response = await fetch(`${API_BASE_URL}/health`, { method: 'GET', headers: makeHeaders() });
+  const response = await fetch(`${API_BASE_URL}/health`, {
+    method: 'GET',
+    headers: makeHeaders(),
+  });
   const bodyText = await response.text();
 
   if (!response.ok) {
-    throw new Error(`Status ${response.status}: ${bodyText || 'Неизвестная ошибка'}`);
+    throw new Error(
+      `Status ${response.status}: ${bodyText || 'Неизвестная ошибка'}`,
+    );
   }
 
   return {
@@ -37,14 +42,19 @@ export async function pingApiHealth(): Promise<HealthCheckResult> {
   };
 }
 
-export async function loginByEmailAndPassword(email: string, password: string): Promise<{ token: string; user: AuthUser }> {
+export async function loginByEmailAndPassword(
+  email: string,
+  password: string,
+): Promise<{ token: string; user: AuthUser }> {
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   });
 
-  const body = (await response.json().catch(() => null)) as { message?: string } | null;
+  const body = (await response.json().catch(() => null)) as {
+    message?: string;
+  } | null;
 
   if (!response.ok) {
     throw new Error(body?.message || 'Ошибка входа');
@@ -59,10 +69,16 @@ export async function getCurrentUser(): Promise<AuthUser> {
     headers: makeHeaders(),
   });
 
-  const body = (await response.json().catch(() => null)) as { message?: string } | AuthUser | null;
+  const body = (await response.json().catch(() => null)) as
+    | { message?: string }
+    | AuthUser
+    | null;
 
   if (!response.ok) {
-    throw new Error((body as { message?: string } | null)?.message || 'Не удалось получить пользователя');
+    throw new Error(
+      (body as { message?: string } | null)?.message ||
+        'Не удалось получить пользователя',
+    );
   }
 
   return body as AuthUser;

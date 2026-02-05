@@ -87,7 +87,11 @@ function App() {
   }
 
   return (
-    <AppShell currentPage={currentPage} onNavigate={setCurrentPage} onLogout={handleLogout}>
+    <AppShell
+      currentPage={currentPage}
+      onNavigate={setCurrentPage}
+      onLogout={handleLogout}
+    >
       {content}
     </AppShell>
   );

@@ -1,7 +1,11 @@
 import { randomUUID } from 'node:crypto';
 
 import { env } from '../config/env.js';
-import { findUserByEmail, findUserById, upsertUser } from '../data/userStore.js';
+import {
+  findUserByEmail,
+  findUserById,
+  upsertUser,
+} from '../data/userStore.js';
 import type { AuthTokenPayload, PublicUser, User } from '../types/auth.js';
 import { signJwt, verifyJwt } from '../utils/jwt.js';
 import { hashPassword, verifyPassword } from '../utils/password.js';
@@ -73,7 +77,11 @@ export function verifyToken(token: string): AuthTokenPayload {
     throw new Error('Token payload is invalid');
   }
 
-  if (payload.role !== 'admin' && payload.role !== 'hr' && payload.role !== 'manager') {
+  if (
+    payload.role !== 'admin' &&
+    payload.role !== 'hr' &&
+    payload.role !== 'manager'
+  ) {
     throw new Error('Token payload role is invalid');
   }
 

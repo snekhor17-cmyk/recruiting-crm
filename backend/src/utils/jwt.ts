@@ -9,7 +9,10 @@ function toBase64Url(value: string): string {
 }
 
 function fromBase64Url(value: string): string {
-  const padded = value.padEnd(value.length + ((4 - (value.length % 4)) % 4), '=');
+  const padded = value.padEnd(
+    value.length + ((4 - (value.length % 4)) % 4),
+    '=',
+  );
   const base64 = padded.replace(/-/g, '+').replace(/_/g, '/');
   return Buffer.from(base64, 'base64').toString('utf-8');
 }
@@ -39,7 +42,11 @@ function parseExpiresInSeconds(expiresIn: string): number {
   return amount * multipliers[unit];
 }
 
-export function signJwt(payload: Record<string, unknown>, secret: string, expiresIn: string): string {
+export function signJwt(
+  payload: Record<string, unknown>,
+  secret: string,
+  expiresIn: string,
+): string {
   const nowInSeconds = Math.floor(Date.now() / 1000);
   const header = { alg: 'HS256', typ: 'JWT' };
   const body = {
@@ -60,7 +67,10 @@ export function signJwt(payload: Record<string, unknown>, secret: string, expire
   return `${encodedHeader}.${encodedPayload}.${signature}`;
 }
 
-export function verifyJwt(token: string, secret: string): Record<string, unknown> {
+export function verifyJwt(
+  token: string,
+  secret: string,
+): Record<string, unknown> {
   const [encodedHeader, encodedPayload, signature] = token.split('.');
 
   if (!encodedHeader || !encodedPayload || !signature) {
@@ -78,7 +88,10 @@ export function verifyJwt(token: string, secret: string): Record<string, unknown
     throw new Error('Invalid token signature');
   }
 
-  const payload = JSON.parse(fromBase64Url(encodedPayload)) as Record<string, unknown>;
+  const payload = JSON.parse(fromBase64Url(encodedPayload)) as Record<
+    string,
+    unknown
+  >;
   const exp = typeof payload.exp === 'number' ? payload.exp : null;
 
   if (!exp || exp <= Math.floor(Date.now() / 1000)) {
