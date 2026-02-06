@@ -8,3 +8,8 @@ coverage/
 .DS_Store
 .vscode/
 .idea/
+
+# Frontend artifacts
+frontend/.next/
+frontend/next-env.d.ts
+frontend/node_modules/
