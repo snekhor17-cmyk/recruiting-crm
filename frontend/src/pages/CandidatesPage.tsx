@@ -4,6 +4,7 @@ import {
   Breadcrumb,
   Button,
   Col,
+  ConfigProvider,
   DatePicker,
   Drawer,
   Flex,
@@ -436,289 +437,343 @@ export function CandidatesPage({
       <Drawer
         title={null}
         placement="right"
-        width="75vw"
+        mask={false}
+        width="90vw"
+        styles={{
+          body: { padding: 16 },
+        }}
         open={Boolean(selectedCandidate)}
         onClose={onCloseCandidate}
         destroyOnClose
-        extra={
-          <Space>
-            <Button type="primary">Назначить собеседование</Button>
-            <Button>Действия</Button>
-          </Space>
-        }
       >
         {selectedCandidate ? (
-          <Space direction="vertical" size="large" style={{ width: '100%' }}>
-            <Space direction="vertical" size={0}>
-              <Breadcrumb
-                items={[
-                  { title: 'Кандидаты' },
-                  {
-                    title: `${selectedCandidate.fullName} ${selectedCandidate.phone}`,
-                  },
-                ]}
-              />
-              <Typography.Text type="secondary">
-                ID {selectedCandidate.id} · Создан:{' '}
-                {selectedCandidate.createdAt}
-              </Typography.Text>
-            </Space>
-
-            <Row gutter={24} align="top">
-              <Col span={15}>
-                <Space
-                  direction="vertical"
-                  size="middle"
-                  style={{ width: '100%' }}
-                >
-                  <Space
-                    direction="vertical"
-                    size={8}
-                    style={{ width: '100%' }}
-                  >
-                    <Typography.Title level={5} style={{ margin: 0 }}>
-                      Основная информация
-                    </Typography.Title>
-                    <Flex vertical gap={12}>
-                      <Space direction="vertical" size={0}>
-                        <Typography.Text strong>Статус</Typography.Text>
-                        <Select
-                          value={selectedCandidate.status}
-                          options={statusOptions}
-                        />
-                      </Space>
-
-                      <Space
-                        direction="vertical"
-                        style={{
-                          border: '1px solid #f0f0f0',
-                          borderRadius: 8,
-                          padding: 12,
-                        }}
-                      >
-                        <Flex justify="space-between" align="center">
-                          <Typography.Text strong>Контакт</Typography.Text>
-                          <Button size="small">Изменить</Button>
-                        </Flex>
-                        <Typography.Text>
-                          {selectedCandidate.fullName}
-                        </Typography.Text>
-                        <Typography.Text>
-                          {selectedCandidate.phone}
-                        </Typography.Text>
-                        <Typography.Text>
-                          {selectedCandidate.email}
-                        </Typography.Text>
-                      </Space>
-
-                      <Space
-                        direction="vertical"
-                        style={{
-                          border: '1px solid #f0f0f0',
-                          borderRadius: 8,
-                          padding: 12,
-                        }}
-                      >
-                        <Flex justify="space-between" align="center">
-                          <Typography.Text strong>
-                            Ответственный HR
-                          </Typography.Text>
-                          <Button size="small">Изменить</Button>
-                        </Flex>
-                        <Typography.Text>
-                          {selectedCandidate.hrAssignee}
-                        </Typography.Text>
-                        <Typography.Text type="secondary">
-                          {selectedCandidate.hrRole}
-                        </Typography.Text>
-                        <Typography.Text>
-                          {selectedCandidate.hrPhone}
-                        </Typography.Text>
-                      </Space>
-                    </Flex>
-                  </Space>
-
-                  <Space
-                    direction="vertical"
-                    size={8}
-                    style={{ width: '100%' }}
-                  >
-                    <Typography.Title level={5} style={{ margin: 0 }}>
-                      Поля кандидата
-                    </Typography.Title>
-                    <Row gutter={[12, 12]}>
-                      <Col span={12}>
-                        <Typography.Text>Город *</Typography.Text>
-                        <Input value={selectedCandidate.city} />
-                      </Col>
-                      <Col span={12}>
-                        <Typography.Text>Офис</Typography.Text>
-                        <Input value={selectedCandidate.office} />
-                      </Col>
-                      <Col span={12}>
-                        <Typography.Text>На вакансию *</Typography.Text>
-                        <Input value={selectedCandidate.vacancyTag} />
-                      </Col>
-                      <Col span={12}>
-                        <Typography.Text>Рекламный канал *</Typography.Text>
-                        <Input value={selectedCandidate.advertisingChannel} />
-                      </Col>
-                      <Col span={12}>
-                        <Typography.Text>Тип привлечения *</Typography.Text>
-                        <Input value={selectedCandidate.attractionType} />
-                      </Col>
-                      <Col span={12}>
-                        <Typography.Text>Возраст</Typography.Text>
-                        <Input value={String(selectedCandidate.age)} />
-                      </Col>
-                      <Col span={12}>
-                        <Typography.Text>Ресечер</Typography.Text>
-                        <Input value={selectedCandidate.researcher} />
-                      </Col>
-                      <Col span={12}>
-                        <Typography.Text>Модель подбора</Typography.Text>
-                        <Segmented<RecruitingModel>
-                          block
-                          options={['Рекрутинг', 'Ресечинг', 'Самонабор']}
-                          value={selectedCandidate.recruitingModel}
-                        />
-                      </Col>
-                      <Col span={12}>
-                        <Typography.Text>Рекомендатель</Typography.Text>
-                        <Input value={selectedCandidate.referrer} />
-                      </Col>
-                      <Col span={12}>
-                        <Typography.Text>Вакансия</Typography.Text>
-                        <Input value={selectedCandidate.vacancy} />
-                      </Col>
-                      <Col span={24}>
-                        <Typography.Text>Ссылка на резюме</Typography.Text>
-                        <Input value={selectedCandidate.resumeLink} />
-                      </Col>
-                      <Col span={24}>
-                        <Space align="center">
-                          <Typography.Text>
-                            Дата следующего контакта
-                          </Typography.Text>
-                          {isOverdue ? (
-                            <Tag color="error">Просрочена</Tag>
-                          ) : null}
-                        </Space>
-                        <DatePicker
-                          style={{ width: '100%' }}
-                          value={dayjs(selectedCandidate.nextContactDate)}
-                          format="DD.MM.YYYY"
-                        />
-                      </Col>
-                      <Col span={8}>
-                        <Typography.Text>Интервью (план)</Typography.Text>
-                        <DatePicker
-                          style={{ width: '100%' }}
-                          value={dayjs(selectedCandidate.plannedInterviewDate)}
-                          format="DD.MM.YYYY"
-                        />
-                      </Col>
-                      <Col span={8}>
-                        <Typography.Text>Интервью (факт)</Typography.Text>
-                        <DatePicker
-                          style={{ width: '100%' }}
-                          value={dayjs(selectedCandidate.actualInterviewDate)}
-                          format="DD.MM.YYYY"
-                        />
-                      </Col>
-                      <Col span={8}>
-                        <Typography.Text>С руководителем</Typography.Text>
-                        <DatePicker
-                          style={{ width: '100%' }}
-                          value={dayjs(selectedCandidate.managerInterviewDate)}
-                          format="DD.MM.YYYY"
-                        />
-                      </Col>
-                    </Row>
-                  </Space>
-
-                  <Space direction="vertical" style={{ width: '100%' }}>
-                    <Typography.Title level={5} style={{ margin: 0 }}>
-                      Примечание
-                    </Typography.Title>
-                    <Input.TextArea value={selectedCandidate.note} rows={6} />
-                  </Space>
+          <ConfigProvider componentSize="small">
+            <Space direction="vertical" size={12} style={{ width: '100%' }}>
+              <Flex
+                justify="space-between"
+                align="flex-start"
+                gap={12}
+                wrap="wrap"
+              >
+                <Space direction="vertical" size={2}>
+                  <Breadcrumb
+                    items={[
+                      { title: 'Кандидаты' },
+                      {
+                        title: `${selectedCandidate.fullName} ${selectedCandidate.phone}`,
+                      },
+                    ]}
+                  />
+                  <Typography.Text strong>
+                    {selectedCandidate.fullName} · {selectedCandidate.phone}
+                  </Typography.Text>
+                  <Typography.Text type="secondary">
+                    ID {selectedCandidate.id} · Создан:{' '}
+                    {selectedCandidate.createdAt}
+                  </Typography.Text>
                 </Space>
-              </Col>
+                <Space>
+                  <Button type="primary">Назначить собеседование</Button>
+                  <Button>Действия</Button>
+                </Space>
+              </Flex>
 
-              <Col span={9}>
-                <Tabs
-                  defaultActiveKey="comments"
-                  items={[
-                    {
-                      key: 'comments',
-                      label: 'Комментарии',
-                      children: (
-                        <Space direction="vertical" style={{ width: '100%' }}>
-                          <Space direction="vertical" style={{ width: '100%' }}>
-                            {comments.length ? (
-                              comments.map((comment) => (
-                                <Space
-                                  key={comment.id}
-                                  direction="vertical"
-                                  size={0}
-                                  style={{
-                                    border: '1px solid #f0f0f0',
-                                    borderRadius: 8,
-                                    padding: 12,
-                                    width: '100%',
-                                  }}
-                                >
-                                  <Typography.Text strong>
-                                    {comment.author}
-                                  </Typography.Text>
-                                  <Typography.Text type="secondary">
-                                    {comment.date}
-                                  </Typography.Text>
-                                  <Typography.Text>
-                                    {comment.text}
-                                  </Typography.Text>
-                                </Space>
-                              ))
-                            ) : (
-                              <Typography.Text type="secondary">
-                                Пока нет комментариев
-                              </Typography.Text>
-                            )}
-                          </Space>
-
-                          <Space direction="vertical" style={{ width: '100%' }}>
-                            <Typography.Text strong>
-                              Добавьте комментарий
-                            </Typography.Text>
-                            <Input.TextArea
-                              rows={4}
-                              value={commentDraft}
-                              onChange={(event) =>
-                                setCommentDraft(event.target.value)
-                              }
-                            />
-                            <Button type="primary" onClick={handleAddComment}>
-                              Добавить комментарий
-                            </Button>
-                          </Space>
+              <Row gutter={16} align="top" wrap={false}>
+                <Col flex="0 0 67%" style={{ maxWidth: '67%' }}>
+                  <Space
+                    direction="vertical"
+                    size={12}
+                    style={{ width: '100%' }}
+                  >
+                    <Space
+                      direction="vertical"
+                      size={6}
+                      style={{ width: '100%' }}
+                    >
+                      <Typography.Title level={5} style={{ margin: 0 }}>
+                        Основная информация
+                      </Typography.Title>
+                      <Flex vertical gap={8}>
+                        <Space direction="vertical" size={0}>
+                          <Typography.Text strong>Статус</Typography.Text>
+                          <Select
+                            value={selectedCandidate.status}
+                            options={statusOptions}
+                          />
                         </Space>
-                      ),
-                    },
-                    {
-                      key: 'tasks',
-                      label: 'Задачи',
-                      children: (
-                        <Typography.Text type="secondary">
-                          Раздел задач будет реализован позже.
-                        </Typography.Text>
-                      ),
-                    },
-                  ]}
-                />
-              </Col>
-            </Row>
-          </Space>
+
+                        <Space
+                          direction="vertical"
+                          style={{
+                            border: '1px solid #f0f0f0',
+                            borderRadius: 8,
+                            padding: 10,
+                          }}
+                        >
+                          <Flex justify="space-between" align="center">
+                            <Typography.Text strong>Контакт</Typography.Text>
+                            <Button size="small">Изменить</Button>
+                          </Flex>
+                          <Typography.Text>
+                            {selectedCandidate.fullName}
+                          </Typography.Text>
+                          <Typography.Text>
+                            {selectedCandidate.phone}
+                          </Typography.Text>
+                          <Typography.Text>
+                            {selectedCandidate.email}
+                          </Typography.Text>
+                        </Space>
+
+                        <Space
+                          direction="vertical"
+                          style={{
+                            border: '1px solid #f0f0f0',
+                            borderRadius: 8,
+                            padding: 10,
+                          }}
+                        >
+                          <Flex justify="space-between" align="center">
+                            <Typography.Text strong>
+                              Ответственный HR
+                            </Typography.Text>
+                            <Button size="small">Изменить</Button>
+                          </Flex>
+                          <Typography.Text>
+                            {selectedCandidate.hrAssignee}
+                          </Typography.Text>
+                          <Typography.Text type="secondary">
+                            {selectedCandidate.hrRole}
+                          </Typography.Text>
+                          <Typography.Text>
+                            {selectedCandidate.hrPhone}
+                          </Typography.Text>
+                        </Space>
+                      </Flex>
+                    </Space>
+
+                    <Space
+                      direction="vertical"
+                      size={6}
+                      style={{ width: '100%' }}
+                    >
+                      <Typography.Title level={5} style={{ margin: 0 }}>
+                        Поля кандидата
+                      </Typography.Title>
+                      <Row gutter={[8, 8]}>
+                        <Col span={12}>
+                          <Typography.Text>Город *</Typography.Text>
+                          <Input value={selectedCandidate.city} />
+                        </Col>
+                        <Col span={12}>
+                          <Typography.Text>Офис</Typography.Text>
+                          <Input value={selectedCandidate.office} />
+                        </Col>
+                        <Col span={12}>
+                          <Typography.Text>На вакансию *</Typography.Text>
+                          <Input value={selectedCandidate.vacancyTag} />
+                        </Col>
+                        <Col span={12}>
+                          <Typography.Text>Рекламный канал *</Typography.Text>
+                          <Input value={selectedCandidate.advertisingChannel} />
+                        </Col>
+                        <Col span={12}>
+                          <Typography.Text>Тип привлечения *</Typography.Text>
+                          <Input value={selectedCandidate.attractionType} />
+                        </Col>
+                        <Col span={12}>
+                          <Typography.Text>Возраст</Typography.Text>
+                          <Input value={String(selectedCandidate.age)} />
+                        </Col>
+                        <Col span={12}>
+                          <Typography.Text>Ресечер</Typography.Text>
+                          <Input value={selectedCandidate.researcher} />
+                        </Col>
+                        <Col span={12}>
+                          <Typography.Text>Модель подбора</Typography.Text>
+                          <Segmented<RecruitingModel>
+                            block
+                            options={['Рекрутинг', 'Ресечинг', 'Самонабор']}
+                            value={selectedCandidate.recruitingModel}
+                          />
+                        </Col>
+                        <Col span={12}>
+                          <Typography.Text>Рекомендатель</Typography.Text>
+                          <Input value={selectedCandidate.referrer} />
+                        </Col>
+                        <Col span={12}>
+                          <Typography.Text>Вакансия</Typography.Text>
+                          <Input value={selectedCandidate.vacancy} />
+                        </Col>
+                        <Col span={24}>
+                          <Typography.Text>Ссылка на резюме</Typography.Text>
+                          <Input value={selectedCandidate.resumeLink} />
+                        </Col>
+                        <Col span={24}>
+                          <Space align="center">
+                            <Typography.Text>
+                              Дата следующего контакта
+                            </Typography.Text>
+                            {isOverdue ? (
+                              <Tag color="error">Просрочена</Tag>
+                            ) : null}
+                          </Space>
+                          <DatePicker
+                            style={{ width: '100%' }}
+                            value={dayjs(selectedCandidate.nextContactDate)}
+                            format="DD.MM.YYYY"
+                          />
+                        </Col>
+                        <Col span={8}>
+                          <Typography.Text>Интервью (план)</Typography.Text>
+                          <DatePicker
+                            style={{ width: '100%' }}
+                            value={dayjs(
+                              selectedCandidate.plannedInterviewDate,
+                            )}
+                            format="DD.MM.YYYY"
+                          />
+                        </Col>
+                        <Col span={8}>
+                          <Typography.Text>Интервью (факт)</Typography.Text>
+                          <DatePicker
+                            style={{ width: '100%' }}
+                            value={dayjs(selectedCandidate.actualInterviewDate)}
+                            format="DD.MM.YYYY"
+                          />
+                        </Col>
+                        <Col span={8}>
+                          <Typography.Text>С руководителем</Typography.Text>
+                          <DatePicker
+                            style={{ width: '100%' }}
+                            value={dayjs(
+                              selectedCandidate.managerInterviewDate,
+                            )}
+                            format="DD.MM.YYYY"
+                          />
+                        </Col>
+                      </Row>
+                    </Space>
+
+                    <Space
+                      direction="vertical"
+                      size={6}
+                      style={{ width: '100%' }}
+                    >
+                      <Typography.Title level={5} style={{ margin: 0 }}>
+                        Примечание
+                      </Typography.Title>
+                      <Input.TextArea value={selectedCandidate.note} rows={6} />
+                    </Space>
+                  </Space>
+                </Col>
+
+                <Col flex="0 0 33%" style={{ maxWidth: '33%' }}>
+                  <div
+                    style={{
+                      background: '#fafafa',
+                      border: '1px solid #f0f0f0',
+                      borderRadius: 10,
+                      padding: 10,
+                      maxHeight: 'calc(100vh - 130px)',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <Tabs
+                      defaultActiveKey="comments"
+                      items={[
+                        {
+                          key: 'comments',
+                          label: 'Комментарии',
+                          children: (
+                            <Space
+                              direction="vertical"
+                              size={10}
+                              style={{ width: '100%' }}
+                            >
+                              <Space
+                                direction="vertical"
+                                size={8}
+                                style={{
+                                  width: '100%',
+                                  maxHeight: 'calc(100vh - 360px)',
+                                  overflow: 'auto',
+                                  paddingRight: 4,
+                                }}
+                              >
+                                {comments.length ? (
+                                  comments.map((comment) => (
+                                    <Space
+                                      key={comment.id}
+                                      direction="vertical"
+                                      size={0}
+                                      style={{
+                                        border: '1px solid #e8e8e8',
+                                        borderRadius: 8,
+                                        background: '#fff',
+                                        padding: 10,
+                                        width: '100%',
+                                      }}
+                                    >
+                                      <Typography.Text strong>
+                                        {comment.author}
+                                      </Typography.Text>
+                                      <Typography.Text type="secondary">
+                                        {comment.date}
+                                      </Typography.Text>
+                                      <Typography.Text>
+                                        {comment.text}
+                                      </Typography.Text>
+                                    </Space>
+                                  ))
+                                ) : (
+                                  <Typography.Text type="secondary">
+                                    Пока нет комментариев
+                                  </Typography.Text>
+                                )}
+                              </Space>
+
+                              <Space
+                                direction="vertical"
+                                size={6}
+                                style={{ width: '100%' }}
+                              >
+                                <Typography.Text strong>
+                                  Добавьте комментарий
+                                </Typography.Text>
+                                <Input.TextArea
+                                  rows={4}
+                                  value={commentDraft}
+                                  onChange={(event) =>
+                                    setCommentDraft(event.target.value)
+                                  }
+                                />
+                                <Button
+                                  type="primary"
+                                  onClick={handleAddComment}
+                                >
+                                  Добавить комментарий
+                                </Button>
+                              </Space>
+                            </Space>
+                          ),
+                        },
+                        {
+                          key: 'tasks',
+                          label: 'Задачи',
+                          children: (
+                            <Typography.Text type="secondary">
+                              Раздел задач будет реализован позже.
+                            </Typography.Text>
+                          ),
+                        },
+                      ]}
+                    />
+                  </div>
+                </Col>
+              </Row>
+            </Space>
+          </ConfigProvider>
         ) : null}
       </Drawer>
     </Space>
