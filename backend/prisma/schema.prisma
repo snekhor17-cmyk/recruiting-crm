@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model contacts {
+  id          String      @id @default(uuid())
+  first_name  String
+  last_name   String
+  middle_name String?
+  phone       String?
+  email       String?
+  city        String?
+  birth_date  DateTime?
+  age         Int?
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  customer_vacancies vacancies[] @relation("vacancy_customer")
+  candidates         candidates[]
+
+  @@index([phone], map: "contacts_phone_idx")
+  @@index([email], map: "contacts_email_idx")
+}
+
+model users {
+  id         String     @id @default(uuid())
+  full_name  String
+  role       String
+  phone      String?
+  email      String?
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+
+  owned_vacancies vacancies[]       @relation("vacancy_owner")
+  owned_candidates candidates[]     @relation("candidate_owner")
+  timeline_events timeline_events[] @relation("timeline_created_by")
+}
+
+model vacancies {
+  id                  String       @id @default(uuid())
+  title               String
+  status              String
+  priority            String
+  city                String?
+  headcount           Int          @default(1)
+  deadline_at         DateTime?
+  description         String?
+  customer_contact_id String?
+  owner_user_id       String?
+  created_at          DateTime     @default(now())
+  updated_at          DateTime     @updatedAt
+
+  customer_contact contacts?    @relation("vacancy_customer", fields: [customer_contact_id], references: [id])
+  owner_user       users?       @relation("vacancy_owner", fields: [owner_user_id], references: [id])
+  candidates       candidates[]
+
+  @@index([status], map: "vacancies_status_idx")
+  @@index([owner_user_id], map: "vacancies_owner_idx")
+}
+
+model candidates {
+  id                      String    @id @default(uuid())
+  contact_id              String
+  vacancy_id              String
+  owner_user_id           String
+  city_snapshot           String?
+  primary_contact_at      DateTime?
+  secondary_contact_at    DateTime?
+  interview_planned_at    DateTime?
+  interview_confirmed_at  DateTime?
+  interview_actual_at     DateTime?
+  feedback_at             DateTime?
+  customer_interview_at   DateTime?
+  offer_sent_at           DateTime?
+  offer_accepted_at       DateTime?
+  start_date_at           DateTime?
+  hired_at                DateTime?
+  probation_passed_at     DateTime?
+  failed_at               DateTime?
+  failed_reason_text      String?
+  failed_stage_snapshot   String?
+  derived_status          String    @default("new")
+  created_at              DateTime  @default(now())
+  updated_at              DateTime  @updatedAt
+
+  contact contacts  @relation(fields: [contact_id], references: [id])
+  vacancy vacancies @relation(fields: [vacancy_id], references: [id])
+  owner_user users  @relation("candidate_owner", fields: [owner_user_id], references: [id])
+
+  @@unique([contact_id, vacancy_id])
+  @@index([derived_status], map: "candidates_status_idx")
+  @@index([owner_user_id], map: "candidates_owner_idx")
+  @@index([vacancy_id], map: "candidates_vacancy_idx")
+  @@index([failed_at], map: "candidates_failed_idx")
+}
+
+model timeline_events {
+  id                 String    @id @default(uuid())
+  entity_type        String
+  entity_id          String
+  event_type         String
+  payload            Json
+  created_by_user_id String?
+  created_at         DateTime  @default(now())
+
+  created_by_user users? @relation("timeline_created_by", fields: [created_by_user_id], references: [id])
+
+  @@index([entity_type, entity_id, created_at(sort: Desc)], map: "timeline_entity_idx")
+}
